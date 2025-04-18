@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Content } from '@google/generative-ai'
 
 type GeminiMessage = Content // { role: "user" | "model", parts: [{ text: string }] }
