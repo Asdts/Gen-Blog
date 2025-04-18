@@ -1,47 +1,47 @@
-// app/preview/[id]/page.tsx
 import connectDB from '@/connection/dbConn'
 import MainModel from '@/model/main'
-import CodeModel from '@/model/code'
-import ContentModel from '@/model/content'
-import DropBlockModel from '@/model/dropBlock'
-import FooterModel from '@/model/footer'
-import FormModel from '@/model/form'
-import HeaderModel from '@/model/header'
-import MediaBlockModel from '@/model/mediaBlock'
-import JsonToTableModel from '@/model/table'
+import { models } from '@/utils/block-config'
 import GeneratedPage from '@/components/generatedPage'
+import NavigationLink from '@/components/navigationLink'
 
 export default async function PreviewPage({ params }: { params: { id: string } }) {
   await connectDB()
 
-  const main = await MainModel.findById(params.id).lean() as { code: string; content: string; dropBlock: string; footer: string; form: string; header: string; mediaBlock: string; table: string; title: string } | null
+  const main = await MainModel.findById(params.id)
+    .populate('childrenPages', 'title')
+    .lean()
 
-    if (!main) {
-        return <div>Page not found</div>
-    }
+  if (!main) return <div className="text-center text-red-600 mt-12">Page not found</div>
 
-  const [code, content, dropBlock, footer, form, header, mediaBlock, table] = await Promise.all([
-    CodeModel.findById(main.code),
-    ContentModel.findById(main.content),
-    DropBlockModel.findById(main.dropBlock),
-    FooterModel.findById(main.footer),
-    FormModel.findById(main.form),
-    HeaderModel.findById(main.header),
-    MediaBlockModel.findById(main.mediaBlock),
-    JsonToTableModel.findById(main.table)
-  ])
+  const blockData = await Promise.all(
+    main.blocks.map(async (block: any) => {
+      const data = await models[block.type].findById(block.refId).lean()
+      return { type: block.type, data }
+    })
+  )
 
   const data = {
     title: main.title,
-    code,
-    content,
-    dropBlock,
-    footer,
-    form,
-    header,
-    mediaBlock,
-    table
+    blocks: blockData,
+    childrenPages: main.childrenPages
   }
 
-  return <GeneratedPage data={JSON.parse(JSON.stringify(data))} />
+  return (
+    <>
+      <GeneratedPage data={JSON.parse(JSON.stringify(data))} />
+
+      {!main.childrenPages?.length && (
+        <div className="text-center mt-4 space-y-2">
+          {["About", "Resources", "FAQ"].map((label) => (
+            <NavigationLink
+              key={label}
+              title={label}
+              topic={`${label} page for ${main.title}`}
+              parentId={main._id.toString()}
+            />
+          ))}
+        </div>
+      )}
+    </>
+  )
 }

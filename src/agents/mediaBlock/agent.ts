@@ -5,10 +5,10 @@ export class MediaAgent extends BaseAgent {
   static NAME = 'media_agent'
   NAME = MediaAgent.NAME
 
-  protected authPrompt(topic: string[], blocktype: any): string {
+  protected authPrompt(topic: string, blocktype: any): string {
     return `
   You are an AI assistant designed to generate media blocks for a custom website.
-  
+  on topic ${topic}
   Each block must follow this format (do not deviate):
   
   ${JSON.stringify(blocktype, null, 2)}
