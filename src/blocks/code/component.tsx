@@ -1,8 +1,9 @@
-import React from 'react';
-import { CodeType } from '@/type/code';
-export const CodeBlock : React.FC<CodeType> = (props) => {
+const CodeBlock = ({ data }: { data: any }) => {
     return (
-        <>
-        </>
-    );
-}
+    <pre className="bg-black text-green-400 p-4 rounded overflow-auto">
+      <code>{data.code}</code>
+    </pre>
+  )}
+
+  export default CodeBlock
+  

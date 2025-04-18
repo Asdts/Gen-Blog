@@ -1,35 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Content } from '@google/generative-ai'
+// agents/TableAgent.ts 
+import { BaseAgent } from '../BaseAgent'
 
-type GeminiMessage = Content // { role: "user" | "model", parts: [{ text: string }] }
-
-export class TableAgent {
+export class TableAgent extends BaseAgent {
   static NAME = 'table_agent'
+  NAME = TableAgent.NAME
 
-  private authPrompt(topic: string,blocktype:any): string {
+  protected authPrompt(topic: string, blocktype: any): string {
     return `
-You are an AI assistant designed to write Table block of my custom website generate only if required
-${topic} is on which table is required
-Your task is to generate a table block that is relevant to the topic for navigation purpose.
-in format of ${blocktype}
+You are an AI assistant designed to write table block for a custom website.
+Generate a table about ${topic} with headers and row data.
+Output format must match this: ${blocktype}
+
+Only return a pure JSON response matching the format above.
     `.trim()
-  }
-
-  getGeminiMessages(topic:string,blocktype:any): GeminiMessage[] {
-    return [
-      {
-        role: 'user',
-        parts: [{ text: this.authPrompt(topic,blocktype) }],
-      },
-    ]
-  }
-
-  getAction(generatedText: string): any {
-    try {
-      return JSON.parse(generatedText)
-    } catch (err) {
-      console.error('Invalid JSON from Gemini:', err)
-      return { error: 'Invalid JSON format' }
-    }
   }
 }

@@ -1,35 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Content } from '@google/generative-ai'
+// agents/HeaderAgent.ts
+import { BaseAgent } from '../BaseAgent'
 
-type GeminiMessage = Content // { role: "user" | "model", parts: [{ text: string }] }
-
-export class HeaderAgent {
+export class HeaderAgent extends BaseAgent {
   static NAME = 'header_agent'
+  NAME = HeaderAgent.NAME
 
-  private authPrompt(topic: string[],blocktype:any): string {
+  protected authPrompt(topic: string[], blocktype: any): string {
     return `
-You are an AI assistant designed to write header block of my custom website generate only if required
-${topic} on topic in websites
-Your task is to generate a header block that is relevant to the topic for navigation purpose.
-in format of ${blocktype}
+You are an AI assistant designed to write header block for a custom website.
+Topics: ${topic.join(', ')}.
+Generate a navigation header block.
+Output format must match this: ${blocktype}
+
+Only return a pure JSON response matching the format above.
     `.trim()
-  }
-
-  getGeminiMessages(topic:string[],blocktype:any): GeminiMessage[] {
-    return [
-      {
-        role: 'user',
-        parts: [{ text: this.authPrompt(topic,blocktype) }],
-      },
-    ]
-  }
-
-  getAction(generatedText: string): any {
-    try {
-      return JSON.parse(generatedText)
-    } catch (err) {
-      console.error('Invalid JSON from Gemini:', err)
-      return { error: 'Invalid JSON format' }
-    }
   }
 }

@@ -1,35 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Content } from '@google/generative-ai'
+// agents/FormAgent.ts
+import { BaseAgent } from '../BaseAgent'
 
-type GeminiMessage = Content // { role: "user" | "model", parts: [{ text: string }] }
-
-export class FormAgent {
+export class FormAgent extends BaseAgent {
   static NAME = 'form_agent'
+  NAME = FormAgent.NAME
 
-  private authPrompt(topic: string,blocktype:any): string {
+  protected authPrompt(topic: string, blocktype: any): string {
     return `
-You are an AI assistant designed to form content block of my custom website generate only if required
-${topic} is topic of website
-Your task is to generate a form block that is relevant to the topic for navigation purpose.
-in format of ${blocktype}
+You are an AI assistant designed to generate a form block for a custom website.
+Topic: ${topic}
+Form may include inputs like name, email, message, etc.
+Output format must match this: ${blocktype}
+
+Only return a pure JSON response matching the format above.
     `.trim()
-  }
-
-  getGeminiMessages(topic:string,blocktype:any): GeminiMessage[] {
-    return [
-      {
-        role: 'user',
-        parts: [{ text: this.authPrompt(topic,blocktype) }],
-      },
-    ]
-  }
-
-  getAction(generatedText: string): any {
-    try {
-      return JSON.parse(generatedText)
-    } catch (err) {
-      console.error('Invalid JSON from Gemini:', err)
-      return { error: 'Invalid JSON format' }
-    }
   }
 }

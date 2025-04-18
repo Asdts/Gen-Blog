@@ -1,36 +1,25 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Content } from '@google/generative-ai'
+// agents/MediaAgent.ts
+import { BaseAgent } from '../BaseAgent'
 
-type GeminiMessage = Content // { role: "user" | "model", parts: [{ text: string }] }
-
-export class mediaAgent {
+export class MediaAgent extends BaseAgent {
   static NAME = 'media_agent'
+  NAME = MediaAgent.NAME
 
-  private authPrompt(topic: string[],blocktype:any): string {
+  protected authPrompt(topic: string[], blocktype: any): string {
     return `
-You are an AI assistant designed to write media block of my custom website generate only if required
-get url from internet relevant to topic
-${topic} is all topic in websites
-Your task is to generate a content block that is relevant to the topic for navigation purpose.
-in format of ${blocktype}
+  You are an AI assistant designed to generate media blocks for a custom website.
+  
+  Each block must follow this format (do not deviate):
+  
+  ${JSON.stringify(blocktype, null, 2)}
+  
+  Where:
+  - "type" is either "image" or "video"
+  - "media" has a "url" (use any placeholder) and "alt"
+  - "attributes" includes numeric height and width
+  
+  Only return a **valid JSON object** matching this format. No markdown. No explanation.
     `.trim()
   }
-
-  getGeminiMessages(topic:string[],blocktype:any): GeminiMessage[] {
-    return [
-      {
-        role: 'user',
-        parts: [{ text: this.authPrompt(topic,blocktype) }],
-      },
-    ]
-  }
-
-  getAction(generatedText: string): any {
-    try {
-      return JSON.parse(generatedText)
-    } catch (err) {
-      console.error('Invalid JSON from Gemini:', err)
-      return { error: 'Invalid JSON format' }
-    }
-  }
+  
 }
