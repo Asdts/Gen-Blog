@@ -32,7 +32,7 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen flex flex-col justify-center items-center p-4">
-      <h1 className="text-3xl font-bold mb-4">🧠 AI Website Builder</h1>
+      <h1 className="text-3xl font-bold mb-4">🧠 Query Info</h1>
 
       <input
         value={prompt}

@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import connectDB from '@/connection/dbConn'
 import MainModel from '@/model/main'
 import llm from '@/connection/genAI'
-import { agents, models, sampleBlockSchema } from '@/utils/blocks-config'
-import { BlockInferenceAgent } from '@/agents/BlockInferenceAgent'
+import { agents, models, sampleBlockSchema } from '@/utils/block-config'
+import { BlockInferenceAgent } from '@/agents/export'
 
 export async function POST(req: NextRequest) {
   await connectDB()

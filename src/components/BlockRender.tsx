@@ -21,7 +21,7 @@ const componentMap: Record<string, React.FC<{ data: any }>> = {
   header: HeaderBlock,
   mediaBlock: MediaBlock,
   table: TableBlock,
-  feture: FeatureBlock,
+  feature: FeatureBlock,
   paragraph: ParagraphBlock,
   testimonial: TestimonialBlock,
   hero: HeroBlock,
