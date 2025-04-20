@@ -2,7 +2,8 @@ import connectDB from '@/connection/dbConn'
 import MainModel from '@/model/main'
 import { models } from '@/utils/block-config'
 import GeneratedPage from '@/components/generatedPage'
-import NavigationLink from '@/components/navigationLink'
+// import NavigationLink from '@/components/navigationLink'
+import NavigationLinkWithSession from '@/components/navigationLinkWithSession'
 
 export default async function PreviewPage({ params }: { params: { id: string } }) {
   await connectDB()
@@ -33,11 +34,12 @@ export default async function PreviewPage({ params }: { params: { id: string } }
       {!main.childrenPages?.length && (
         <div className="text-center mt-4 space-y-2">
           {["About", "Resources", "FAQ"].map((label) => (
-            <NavigationLink
+            <NavigationLinkWithSession
               key={label}
               title={label}
               topic={`${label} page for ${main.title}`}
               parentId={main._id.toString()}
+              // sessionId={localStorage.getItem('sessionId') || crypto.randomUUID()}
             />
           ))}
         </div>

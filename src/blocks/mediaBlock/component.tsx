@@ -8,7 +8,7 @@ const MediaBlock = ({ data }: { data: any }) => {
         <div key={i}>
           {item.type === 'image' ? (
             <AspectRatio ratio={16 / 9}>
-              <Image src={item.media.url} className="rounded shadow" alt={item.media.alt}/>
+              <img src={item.media.url} className="rounded shadow" alt={item.media.alt}/>
             </AspectRatio>
             // <img src={item.media.url} alt={item.media.alt} className="rounded shadow" />
           ) : (

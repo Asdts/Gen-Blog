@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-export default function NavigationLink({ title, topic, parentId }) {
+export default function NavigationLink({ title, topic, parentId , sessionId}) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
@@ -13,7 +13,7 @@ export default function NavigationLink({ title, topic, parentId }) {
       const res = await fetch('/api/generate-child-page', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic, parentId })
+        body: JSON.stringify({ topic, parentId , sessionId }),
       })
       const data = await res.json()
       router.push(`/preview/${data.id}`)

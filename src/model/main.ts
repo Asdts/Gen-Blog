@@ -9,6 +9,7 @@ const mainSchema = new mongoose.Schema(
     templateName: { type: String, default: 'default-template' },
     version: { type: Number, default: 1 },
     status: { type: String, enum: ['draft', 'published'], default: 'draft' },
+    sessionId: { type: String, index: true },
     blocks: [
       {
         type: { type: String, required: true },

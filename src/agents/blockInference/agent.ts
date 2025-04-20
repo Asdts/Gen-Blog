@@ -1,4 +1,4 @@
-// agents/BlockInferenceAgent.ts
+// agents/blockInference/agent.ts
 import { BaseAgent } from '../BaseAgent'
 
 export class BlockInferenceAgent extends BaseAgent {

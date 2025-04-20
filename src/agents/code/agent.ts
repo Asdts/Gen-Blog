@@ -1,4 +1,3 @@
-// CodeAgent.ts
 import { BaseAgent } from '../BaseAgent'
 
 export class CodeAgent extends BaseAgent {
